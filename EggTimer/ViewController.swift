@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var stopButton: UIButton!
     
     let eggTimes = ["Soft": 300, "Medium": 420, "Hard": 720]
     var timer = Timer()
@@ -33,6 +34,7 @@ class ViewController: UIViewController {
     
     private func hardnessHandle(hardness: String){
         timer.invalidate()
+        stopButton.isHidden = false
         guard let hardnessTime = eggTimes[hardness] else {return}
         self.totalTime = hardnessTime
     }
@@ -45,10 +47,13 @@ class ViewController: UIViewController {
             timer.invalidate()
             self.titleLabel.text = "Egg Done"
             playAlert()
+            stopButton.isHidden = true
         }
     }
     
     private func resetApp() {
+        timer.invalidate()
+        stopButton.isHidden = true
         self.titleLabel.text = "How do you like your eggs?"
         self.progressBar.progress = 0.0
         self.secondsPassed = 0
@@ -59,5 +64,8 @@ class ViewController: UIViewController {
         let url = Bundle.main.url(forResource: "alarm_sound", withExtension: "mp3")
         audioPlayer = try! AVAudioPlayer(contentsOf: url!)
         audioPlayer?.play()
+    }
+    @IBAction func stopButton(_ sender: UIButton) {
+        resetApp()
     }
 }
